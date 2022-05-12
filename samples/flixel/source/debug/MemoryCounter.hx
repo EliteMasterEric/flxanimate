@@ -1,6 +1,9 @@
 package debug;
 
 import openfl.system.System;
+#if hl
+import hl.Gc;
+#end
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 
@@ -36,7 +39,7 @@ class MemoryCounter extends TextField
 	@:noCompletion
 	private #if !flash override #end function __enterFrame(deltaTime:Float):Void
 	{
-		var mem:Float = Math.round(System.totalMemory / BYTES_PER_MEG / ROUND_TO) * ROUND_TO;
+		var mem:Float = Math.round(#if !hl System.totalMemory #else Gc.stats().currentMemory #end / BYTES_PER_MEG / ROUND_TO) * ROUND_TO;
 
 		if (mem > memPeak)
 			memPeak = mem;
